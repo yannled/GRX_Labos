@@ -1,15 +1,23 @@
+
+
+
+
 # Laboratoire SNMP
 
-Joel Schar, Yann Lederrey, Yohann Meyer
+Joel Schär, Yann Lederrey, Yohann Meyer
 
 
 
 ## Objectif 1 : Construire le réseau et réaliser la configuration de base des équipements
 
-###Configuration des machines
 
-Il faut relier les équipement comme indiqué sur le schéma ci dessous. 
-Les liaisons entre l'armoire de brassage et les machines Windows était le **B05LL09** et le **B05LL10**.
+
+### Configuration des machines
+
+Il faut relier les équipements comme indiqué sur le schéma ci dessous. 
+Les liaisons entre l'armoire de brassage et les machines Windows était le **B05LL09** et le **B05LL10**. Le schéma réseau ci dessous, illustre le montage réseau utilisé.
+
+![](/home/joel/Switchdrive/HEIG/S-5/GRX/Labos/GRX_Labos_repo_git/02_labo_snmp/img/schema_resau.jpg)
 
 Il faut ensuite configurer les machines en leur attribuant les adresses ip indiquées dans le tableau ci- dessous.
 
@@ -23,9 +31,9 @@ Il faut ensuite configurer les machines en leur attribuant les adresses ip indiq
 | Dell 9010  | Ubuntu (VM) | NIC       | 192.168.1.4 |     255.255.255.0     |      192.168.1.1      |
 | Dell 9020  |   Win 10    | NIC       | 192.168.3.3 |     255.255.255.0     |      192.168.3.1      |
 
-Pour ce qui est des machines Windows il faut faire la configuration dans les paramètre réseau de la carte connectée au réseau.
+Pour ce qui est des machines Windows, il faut faire la configuration dans les paramètres réseau dédiée et reliée au montage.
 
-Pour la machine virtuelle Ubuntu, il est nécessaire de régler la carte réseau en mode **Bridged Networking** dans les paramètres de configuration VMware et d'associer la carte virtuelle avec la carte physique connectée au réseau. Définir ensuite les paramètres Ip dans les paramètres réseau de la machine Linux.
+Pour la machine virtuelle Ubuntu, il est nécessaire de régler la carte réseau en mode **Bridged Networking** dans les paramètres de configuration VMware et d'associer la carte virtuelle avec la carte physique correspondante. Définir ensuite les paramètres Ip dans les réglage réseau de la machine Linux.
 
 Pour la configuration du router cisco il faut entrer les commandes suivantes dans le terminal.
 
@@ -44,7 +52,7 @@ Pour la configuration du router cisco il faut entrer les commandes suivantes dan
 > exit
 ```
 
-Pour attribuer une adresse Ip au switch faut entrer les commandes suivantes dans le terminal.
+Pour attribuer une adresse Ip au switch il faut entrer les commandes suivantes dans le terminal.
 
 ```
 > enable
@@ -58,13 +66,15 @@ Pour attribuer une adresse Ip au switch faut entrer les commandes suivantes dans
 > exit
 ```
 
-#### 
+
 
 ## Objectif 2 : Configurer un *SNMP Manager*
 
 1. Vérification que le localhost existe déjà (Vérifier que le community string est bien public)
 
 ![IMG_20181106_151642](./img/IMG_20181106_151642.jpg)
+
+
 
 ## Objectif 3 : Configurer différents agents SNMP
 
@@ -73,20 +83,23 @@ Pour attribuer une adresse Ip au switch faut entrer les commandes suivantes dans
 ![IMG_20181106_151642](./img/IMG_20181106_152549.jpg)
 
 3. **A l'aide du browser snmpb, interrogez le localhost :**
-   - Dans l'ordre des images :
-     - le nom du pc : PC10BB05
-     - la decription système hardware et software
-     - le OID système
-     - l'UPtime du système
-     - le contact et la localisation malheuresement vide les deux.
+   - le nom du pc : PC10BB05
 
 ![IMG_20181106_151642](./img/IMG_20181106_152921.jpg)
 
+- la decription système hardware et software
+
 ![IMG_20181106_151642](./img/IMG_20181106_153007.jpg)
+
+- le OID système
 
 ![IMG_20181106_151642](./img/IMG_20181106_153016.jpg)
 
+- l'UPtime du système
+
 ![IMG_20181106_151642](./img/IMG_20181106_153024.jpg)
+
+- le contact et la localisation malheuresement vide les deux.
 
 ![IMG_20181106_151642](./img/IMG_20181106_153032.jpg)
 
@@ -105,19 +118,20 @@ Pour attribuer une adresse Ip au switch faut entrer les commandes suivantes dans
 ![IMG_20181106_151642](./img/IMG_20181106_154249.jpg)
 
 5. **A l'aide du browser snmpb, interrogez le DELL 9020 et determinez le nom de l'équipement, le nom du responsable de l'équipement, son nombre d'interfaces et le traffic de chacunes des interfaces.**
-   - Dans l'ordre des images on retrouve : 
+   - on retrouve : 
      - le nom de l'équipement : PC10CB05
-     - la personne de contact, responsable (vide)
-     - le nombre d'interface, 35
-     - le trafic de chacunes des interfaces.
-
-
 
 ![IMG_20181106_151642](./img/IMG_20181106_154116.jpg)
 
+- la personne de contact, responsable (vide)
+
 ![IMG_20181106_151642](./img/IMG_20181106_154133.jpg)
 
+- le nombre d'interface, 35
+
 ![IMG_20181106_151642](./img/IMG_20181106_154328.jpg)
+
+- le trafic de chacune des interfaces.
 
 ![IMG_20181106_151642](./img/IMG_20181106_154841.jpg)
 
@@ -143,7 +157,7 @@ Pour attribuer une adresse Ip au switch faut entrer les commandes suivantes dans
 
 - Créez un nouveau profile dans snmpb pour le routeur :
 
-![IMG_20181106_151642](/home/zutt/Documents/sync/Heig/GRX/GRX_Labos/Labo2/img/IMG_20181106_160249.jpg)
+![IMG_20181106_151642](./img/IMG_20181106_160249.jpg)
 
 - Testez que le manager SNMP peut interroger l'agent SNMP du routeur cisco.
 
@@ -182,7 +196,11 @@ Pour attribuer une adresse Ip au switch faut entrer les commandes suivantes dans
 
 - Configurez le deuxième équipement Cisco (switch) afin de pouvoir l'interroger sur notre manager SNMP.
 
+  Entrez les commandes suivantes dans le terminal du switch
+
 ![IMG_20181106_151642](./img/IMG_20181106_163626.jpg)
+
+Une fois le switch configuré, celui-ci en maintenant accessible de puis SNMPb
 
 ![IMG_20181106_151642](./img/IMG_20181106_164024.jpg)
 
