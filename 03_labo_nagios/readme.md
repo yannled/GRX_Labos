@@ -6,7 +6,65 @@ Joel Schär, Yann Lederrey, Yohann Meyer
 
 On a fait la même chose que pour les derniers laboratoires.
 
-Tout se ping parfaitement.
+### Extrait du laboratoire SNMP
+
+### Configuration des machines
+
+Il faut relier les équipements comme indiqué sur le schéma ci dessous. 
+Les liaisons entre l'armoire de brassage et les machines Windows était le **B05LL09** et le **B05LL10**. Le schéma réseau ci dessous, illustre le montage réseau utilisé.
+
+![schema_resau.jpg](./img/schema_resau.jpg)
+
+Il faut ensuite configurer les machines en leur attribuant les adresses ip indiquées dans le tableau ci- dessous.
+
+| Équipement |     OS      | Interface | Adresse IP  | Masque de sous-réseau | Passerelle par défaut |
+| :--------- | :---------: | --------- | :---------: | :-------------------: | :-------------------: |
+| R1         |    CISCO    | 0 / 1     | 192.168.3.1 |     255.255.255.0     |      192.168.3.1      |
+| R1         |    CISCO    | 0 /0      | 192.168.1.1 |     255.255.255.0     |      192.168.1.1      |
+| S1         |    CISCO    | 21        | 192.168.1.2 |     255.255.255.0     |      192.168.1.1      |
+| S1         |    CISCO    | 23        | 192.168.1.2 |     255.255.255.0     |      192.168.1.1      |
+| Dell 9010  |   Win 10    | NIC       | 192.168.1.3 |     255.255.255.0     |      192.168.1.1      |
+| Dell 9010  | Ubuntu (VM) | NIC       | 192.168.1.4 |     255.255.255.0     |      192.168.1.1      |
+| Dell 9020  |   Win 10    | NIC       | 192.168.3.3 |     255.255.255.0     |      192.168.3.1      |
+
+Pour ce qui est des machines Windows, il faut faire la configuration dans les paramètres réseau dédiée et reliée au montage.
+
+Pour la machine virtuelle Ubuntu, il est nécessaire de régler la carte réseau en mode **Bridged Networking** dans les paramètres de configuration VMware et d'associer la carte virtuelle avec la carte physique correspondante. Définir ensuite les paramètres Ip dans les réglage réseau de la machine Linux.
+
+Pour la configuration du router cisco il faut entrer les commandes suivantes dans le terminal.
+
+```
+> enable
+> configure terminal
+> interface GigabitEthernet 0/0
+> ip address 192.168.1.1 255.255.255.0
+> no shutdown
+> exit
+> interaface GigabitEthernet 0/1
+> ip address 192.168.3.1 255.255.255.0
+> no shutdown
+> exit
+> exit
+> exit
+```
+
+Pour attribuer une adresse Ip au switch il faut entrer les commandes suivantes dans le terminal.
+
+```
+> enable
+> configure terminal
+> interface vlan1
+> ip address 192.168.1.2 255.255.255.0
+> no shutdown
+> exit
+> ip default-gateway 192.168.1.1
+> exit
+> exit
+```
+
+
+
+On obtient en finalité un réseau dans lequel toutes les machines peuvent être pingée entre elles.
 
 ## Objectif 2
 
@@ -21,7 +79,7 @@ Tutoriel:
    ![1544537591081](./img/1544537591081.png)
 
 4. faites un import.
-5. Démarrez la vm se nommant vm
+5. Démarrez la vm se nommant "vm"
 6. un login localhost est demandé : 
 
    1. mot de passe : nagiosxi
@@ -32,7 +90,8 @@ Tutoriel:
 
 ![1544538543475](./img/1544538543475.png)
 
-8. vous pouvez changer la langue de votre clavier en effectuant la commande suivante : `vi etc/sysconfig/keyboard` ensuite attribuez la valeur fr_CH à la variable KEYTABLE. faites `:x` pour sauver vos changements.
+8. vous pouvez changer la langue de votre clavier en effectuant la commande suivante : 
+   `vi etc/sysconfig/keyboard` , ensuite attribuez la valeur "fr_CH" à la variable "KEYTABLE". faites `:wx` pour sauver vos changements.
 
    1. si le fichier n'existe pas, faites `localectl set-keymap ch-fr`
 
@@ -96,17 +155,13 @@ On peut maintenant voir les différents hosts dans la consôle.
 
 ![photo_2018-12-18_16-20-20](/home/joel/Switchdrive/HEIG/S-5/GRX/Labos/GRX_Labos_repo_git/03_labo_nagios/img/photo_2018-12-18_16-20-20.jpg)
 
-#### question 3
+#### Question 3
 
 Deux moyens possible pour faire la découverte des hôtes est d'utiliser SNMP ou de faire un simple ping vers toutes les adresses IP.
 
 ## Objectif 4
 
 Pour l'auto découverte de la machine windows.
-
-![photo_2018-12-18_16-21-16](/home/joel/Switchdrive/HEIG/S-5/GRX/Labos/GRX_Labos_repo_git/03_labo_nagios/img/photo_2018-12-18_16-21-16.jpg)
-
-
 
 ![photo_2018-12-18_16-21-00](/home/joel/Switchdrive/HEIG/S-5/GRX/Labos/GRX_Labos_repo_git/03_labo_nagios/img/photo_2018-12-18_16-21-00.jpg)
 
@@ -124,7 +179,7 @@ Une fois toutes la configuration faites, nous ne pouvions tout de même pas avoi
 
 
 
-#### question 4
+#### Question 4
 
 Il est possible de monitorer les services suivant.
 
@@ -132,9 +187,9 @@ Il est possible de monitorer les services suivant.
 
 
 
-#### quesiton 5 - 6
+#### Quesiton 5 - 6
 
-Après avoir changé le réseau du serveur nagios sur le réseau de l'école et remis la carte réseau en mode DHCP on peut faire une découverte de tous les devices du réseau.
+Après avoir changé le réseau du serveur nagios sur le réseau de l'école est remis la carte réseau en mode DHCP. On peut faire une découverte de tous les devices du réseau.
 
 ![photo_2018-12-18_16-44-51](/home/joel/Switchdrive/HEIG/S-5/GRX/Labos/GRX_Labos_repo_git/03_labo_nagios/img/photo_2018-12-18_16-44-51.jpg)
 
